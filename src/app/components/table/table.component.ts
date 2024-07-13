@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Customer } from 'src/app/model/Customer';
 import { Transaction } from 'src/app/model/Transaction';
+import { MatTableDataSource } from '@angular/material/table';
+
 
 @Component({
   selector: 'app-table',
@@ -8,6 +10,7 @@ import { Transaction } from 'src/app/model/Transaction';
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit {
+
   customers: Customer[] = [
     { id: 1, name: 'Ahmed Ali' },
     { id: 2, name: 'Aya Elsayed' },
@@ -28,11 +31,19 @@ export class TableComponent implements OnInit {
     { id: 9, customer_id: 5, date: '2022-01-02', amount: 875 }
   ];
 
+  dataSource: any = null;
+  displayedColumns: string[] = ['id', 'name', 'transactionDate', 'transactionAmount']; // Adjust columns as per your need
+
+
   ngOnInit(): void {
     this.customers.forEach(customer => {
       customer.transactions = this.transactions.filter(transaction => transaction.customer_id === customer.id);
+      this.dataSource = new MatTableDataSource<Customer>(this.customers);
     });
+
 
     console.log(this.customers)
   }
+
+
 }
