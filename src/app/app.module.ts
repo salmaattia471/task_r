@@ -11,12 +11,15 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { ChartComponent } from './chart/chart.component';
+import { FormGroup, NgModel, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    TableComponent
+    TableComponent,
+    ChartComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +28,9 @@ import { MatTableModule } from '@angular/material/table';
     MatToolbarModule,
     MatButtonModule,
     MatSortModule,
-    MatTableModule
+    MatTableModule,
+    ReactiveFormsModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

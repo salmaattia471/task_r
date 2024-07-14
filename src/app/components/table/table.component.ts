@@ -2,6 +2,9 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Customer } from 'src/app/model/Customer';
 import { Transaction } from 'src/app/model/Transaction';
 import { MatTableDataSource } from '@angular/material/table';
+import { CustomerService } from 'src/app/customer.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+
 
 
 @Component({
@@ -11,38 +14,41 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class TableComponent implements OnInit {
 
-  customers: Customer[] = [
-    { id: 1, name: 'Ahmed Ali' },
-    { id: 2, name: 'Aya Elsayed' },
-    { id: 3, name: 'Mina Adel' },
-    { id: 4, name: 'Sarah Reda' },
-    { id: 5, name: 'Mohamed Sayed' }
-  ];
+  constructor(private _CustomerService: CustomerService, private _FormBuilder: FormBuilder) {
 
-  transactions: Transaction[] = [
-    { id: 1, customer_id: 1, date: '2022-01-01', amount: 1000 },
-    { id: 2, customer_id: 1, date: '2022-01-02', amount: 2000 },
-    { id: 3, customer_id: 2, date: '2022-01-01', amount: 550 },
-    { id: 4, customer_id: 3, date: '2022-01-01', amount: 500 },
-    { id: 5, customer_id: 2, date: '2022-01-02', amount: 1300 },
-    { id: 6, customer_id: 4, date: '2022-01-01', amount: 750 },
-    { id: 7, customer_id: 3, date: '2022-01-02', amount: 1250 },
-    { id: 8, customer_id: 5, date: '2022-01-01', amount: 2500 },
-    { id: 9, customer_id: 5, date: '2022-01-02', amount: 875 }
-  ];
-
+  }
   dataSource: any = null;
+  filteredDataSource: any = null;
   displayedColumns: string[] = ['id', 'name', 'transactionDate', 'transactionAmount']; // Adjust columns as per your need
 
-
+  searchForm!: FormGroup;
   ngOnInit(): void {
-    this.customers.forEach(customer => {
-      customer.transactions = this.transactions.filter(transaction => transaction.customer_id === customer.id);
-      this.dataSource = new MatTableDataSource<Customer>(this.customers);
+    this.dataSource = new MatTableDataSource<Customer>(this._CustomerService.getcustomers());
+    this.filteredDataSource=this.dataSource
+    this.searchForm = this._FormBuilder.group({
+      search: ['']
+
+
     });
 
 
-    console.log(this.customers)
+
+    this.searchForm.get('search')?.valueChanges.subscribe(value => {
+      this.applyFilter(value);
+    });
+   
+
+  }
+  applyFilter(filterValue: string) {
+    if (filterValue && filterValue.trim()) {
+      let customers: Customer[] = this._CustomerService.getcustomers()
+
+      this.filteredDataSource.data = customers.filter((customer) =>
+        customer.name.toLowerCase().includes(filterValue.trim().toLowerCase())
+      );
+    } else {
+      this.filteredDataSource.data = this.dataSource.data;
+    }
   }
 
 

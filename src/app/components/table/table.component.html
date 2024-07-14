@@ -1,5 +1,10 @@
 <!-- customer-table.component.html -->
-<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+<form [formGroup]="searchForm">
+    <input placeholder="Search customers" formControlName="search" />
+  </form>
+  
+  <table mat-table [dataSource]="filteredDataSource" matSort class="mat-elevation-z8">
     <!-- Columns for main customer table -->
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef> ID </th>
@@ -34,4 +39,5 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let customer; columns: displayedColumns;"></tr>
   </table>
+  
   
